@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>streaming app</title>
+        <!-- // call to back -->
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+
+    <body>
+        <h1>Welcome to videochat app!</h1>
+            <!-- we can see video here -->
+            <h4>Preview: </h4>
+            <canvas id="preview" ></canvas>
+
+            <!-- here should show if camera is on/off -->
+            <h4>Status: </h4>
+            <div class="status"></div>
+        <button id="btn" >Encender stream</button>
+        <video src="" id="video" style="width: 500px; height: 300px;" autoplay="true" ><video/>
+
+
+        <script>
+
+            // catching events
+            var canvas = document.querySelector('#preview') // catch canvas tag
+            var context = canvas.getContext('2d')
+            var btn = document.querySelector('#btn')
+
+            canvas.style.display = 'none'
+            canvas.width = 600;
+            canvas.height = 400;
+
+            context.width = canvas.width;
+            context.height = canvas.height;
+
+            var video = document.querySelector('#video')
+            var socket = io();
+
+            // we allow to generate different functions
+            function publicarMensaje(msg) { //o status div
+                document.querySelector('.status').innerText = msg;
+            }
+
+            function loadCamara(stream) {
+                video.srcObject = stream; // here catches video
+                publicarMensaje('camara funcionando')
+            }
+
+            // when errors
+            function errorCamara(){
+                publicarMensaje('camara ha fallado')
+            }
+
+            function verVideo(video, context ){
+                context.drawImage(video, 0,0 , context.width, context.height)
+                socket.emit('stream', canvas.toDataURL('image/webp'));
+            }
+
+
+            // button activates acces to camera
+            btn.addEventListener('click', () => {
+                // confirmation alert
+                alert('emitiendo')
+                //asks what navigator is ised
+                navigator.getUserMedia = (navigator.getUserMedia || navigator.webkit || navigator.mozGetUserMedia
+                || navigator.msgGetUserMedia)
+
+                if(navigator.getUserMedia){
+                    navigator.getUserMedia({video:true}, loadCamara, errorCamara )
+                } 
+
+                // interval time for update video
+                var intervalo = setInterval( () => {
+                    verVideo(video, context)
+                }, 80)
+            })
+
+        </script>
+    </body>
+</html>

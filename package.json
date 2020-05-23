@@ -1,0 +1,25 @@
+{
+  "name": "stream-node",
+  "version": "0.0.1",
+  "description": "viceohcat streaming node js socket io",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "socket",
+    "io",
+    "video-chat"
+  ],
+  "author": "JG",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
